@@ -61,7 +61,8 @@ def generate_distances_matrix(coordinates, is_pseudo_euclidian):
   return distances_matrix
 
 def run_nn_heuristic(distances_matrix):
-  current_city = random.randint(0, len(distances_matrix) - 1)
+  starting_city = random.randint(0, len(distances_matrix) - 1)
+  current_city = starting_city
   visited_cities_indexes = set()
   total_distance = 0
 
@@ -69,7 +70,7 @@ def run_nn_heuristic(distances_matrix):
     visited_cities_indexes.add(current_city)
     nearest_distance = math.inf
 
-    for neighbor_index in range(len(distances_matrix[current_city])):
+    for neighbor_index in range(len(distances_matrix)):
       distance_to_neighbor = distances_matrix[current_city][neighbor_index]
       if neighbor_index not in visited_cities_indexes and distance_to_neighbor < nearest_distance:
         nearest_city_index = neighbor_index
@@ -77,6 +78,8 @@ def run_nn_heuristic(distances_matrix):
 
     total_distance += nearest_distance
     current_city = nearest_city_index
+
+  total_distance += distances_matrix[current_city][starting_city]
   return total_distance
 
 print('file_name', f'avg_result ({RUNS} runs)', f'avg_time ({RUNS} runs, ms)', sep="\t")
